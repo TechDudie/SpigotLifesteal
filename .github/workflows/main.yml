@@ -1,12 +1,13 @@
 name: Build Spigot JAR
-run-name: Build Spigot Jar
 on: [push]
 jobs:
   spigot-build:
     runs-on: ubuntu-latest
     steps:
       - name: Build Spigot Jar
-      - uses: SpraxDev/Action-SpigotMC@v4
+      - uses: SpraxDev/Action-SpigotMC@v4.1.0
         with:
           versions: latest
           buildToolProvider: SpigotMC
+      - name: Upload Artifact
+        run: ls
