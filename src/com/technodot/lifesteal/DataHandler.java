@@ -18,7 +18,7 @@ import org.bukkit.util.io.BukkitObjectOutputStream;
 
 
 public class DataHandler implements Serializable {
-    private static transient final long serialVersionUID = -1681012206529286330L;
+	private static transient final long serialVersionUID = 2104135565336474972L;
  
     public final HashMap<Location, String> blockSnapShot;
     public final HashSet<UUID> previouslyOnlinePlayers;
@@ -120,12 +120,12 @@ public class DataHandler implements Serializable {
    
         // You will most likely want to change the file location to your some other directory,
         // like your plugin's data directory, instead of the Tutorial's.
-        new Data(blockSnapShot, previouslyOnlinePlayers).saveData("Tutorial.data");
+        new DataHandler(blockSnapShot, previouslyOnlinePlayers).saveData("Tutorial.data");
         Bukkit.getServer().getLogger().log(Level.INFO, "Data Saved");
     }
     public static void welcomePlayersAndResetBlocks() {
         // Load the data from disc using our loadData method.
-        Data data = new Data(Data.loadData("Tutorial.data"));
+    	DataHandler data = new DataHandler(DataHandler.loadData("Tutorial.data"));
         // For each player that is current online send them a message
         data.previouslyOnlinePlayers.forEach(playerId -> {
             if (Bukkit.getServer().getPlayer(playerId).isOnline()) {
