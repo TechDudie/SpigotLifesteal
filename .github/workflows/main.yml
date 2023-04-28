@@ -1,11 +1,16 @@
 name: Build Spigot JAR
-on: [push]
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
 jobs:
-  spigot-build:
+  build:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v2
       - name: Build Spigot Jar
-      - uses: SpraxDev/Action-SpigotMC@v4.1.0
+        uses: SpraxDev/Action-SpigotMC@v4.1.0
         with:
           versions: latest
           buildToolProvider: SpigotMC
