@@ -8,3 +8,9 @@ commands:
     withdraw:
         description: Withdraws a heart from yourself.
         usage: /<command>
+    free:
+        description: Debug command that gives you a free heart item.
+        usage: /<command>
+    reset:
+        description: Debug command that resets your heart count.
+        usage: /<command>

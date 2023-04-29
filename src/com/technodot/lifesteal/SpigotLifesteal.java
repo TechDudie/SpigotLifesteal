@@ -7,18 +7,27 @@ import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class SpigotLifesteal extends JavaPlugin {
-	private static final Listener RightClickEvent = new HeartListener();
+	
+	private static final Listener EventListener = new HeartListener();
 	
 	@Override
 	public void onEnable() {
+		// Create heart item
 		LifestealHeart.init(this);
+		
+		// Register commands
 		getCommand("withdraw").setExecutor(new LifestealWithdraw());
-		getServer().getPluginManager().registerEvents(SpigotLifesteal.RightClickEvent, this);
+		getCommand("free").setExecutor(new LifestealWithdraw());
+		getCommand("reset").setExecutor(new LifestealWithdraw());
+		
+		// Register EventListener
+		getServer().getPluginManager().registerEvents(SpigotLifesteal.EventListener, this);
+		
 		Bukkit.getServer().getLogger().log(Level.INFO, "SpigotLifesteal v1.0 loaded!");
 	}
 	
 	@Override
 	public void onDisable() {
-		
+		// Nothing needed for disable
 	}
 }
