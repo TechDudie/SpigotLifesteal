@@ -1,5 +1,8 @@
 package com.technodot.lifesteal;
 
+import org.bukkit.BanList.Type;
+import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -10,8 +13,6 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
 public class HeartListener implements Listener {
-	
-	public boolean environmentalHeartLoss = false;
 	
 	@EventHandler
 	public void onInteract(PlayerInteractEvent event) {
@@ -38,7 +39,7 @@ public class HeartListener implements Listener {
 	
 	@EventHandler
 	public void onPlayerDeath(PlayerDeathEvent event) {
-		SpigotLogger.chat("Death Event Detected"); // debug
+		SpigotLogger.debug("Death event detected");
 		Player player = event.getEntity();
 		Player killer = player.getKiller();
 		event.setDeathMessage(null);
@@ -47,9 +48,9 @@ public class HeartListener implements Listener {
 			modifyMaxHealth(player, -2);
 			modifyMaxHealth(killer, 2);
 			SpigotLogger.chat("§c" + player.getDisplayName() + "§7 was killed by §c" + killer.getDisplayName() + "§7!");
-		} else if (environmentalHeartLoss) {
+		} else if (SpigotLifesteal.environmentalHeartLoss) {
 			modifyMaxHealth(player, -2);
-			SpigotLogger.chat("§c" + player.getDisplayName() + "§7 killed theirself!");
+			SpigotLogger.chat("§c" + player.getDisplayName() + "§7 killed themself!");
 		}
 		if (player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue() <= 0) {
 			SpigotLogger.chat("§c" + player.getDisplayName() + "§7 has ran out of lives, §c" + player.getDisplayName() + "§7 has been banned!");
@@ -59,6 +60,14 @@ public class HeartListener implements Listener {
 	public static boolean modifyMaxHealth(Player target, int change) {
 		double currentHealth = target.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue();
 		if (currentHealth >= 40) {
+			return false;
+		} else if (currentHealth - (double) change < 1) {
+			if (SpigotLifesteal.postMortalSpectation) {
+				target.setGameMode(GameMode.SPECTATOR);
+			} else {
+				Bukkit.getBanList(Type.NAME).addBan(target.getDisplayName(), "§cYou ran out of lives! You will be unbanned when someone revives you.", null, null);
+			}
+			target.kickPlayer("§cYou ran out of lives! You will be unbanned when someone revives you.");
 			return false;
 		}
 		target.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(currentHealth + (double) change);

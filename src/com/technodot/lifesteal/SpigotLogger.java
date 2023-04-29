@@ -21,4 +21,9 @@ public class SpigotLogger {
 		Bukkit.broadcastMessage(message);
 		info(message);
 	}
+	public static void debug(String message) {
+		if (SpigotLifesteal.debugMode) {
+			info("[DEBUG] " + message);
+		}
+	}
 }

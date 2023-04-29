@@ -9,8 +9,8 @@ commands:
         description: Withdraws a heart from yourself.
         usage: /<command>
     free:
-        description: Debug command that gives you a free heart item.
-        usage: /<command>
+        description: Admin console-only command.
+        usage: /<command> <player>
     reset:
-        description: Debug command that resets your heart count.
-        usage: /<command>
+        description: Admin console-only command.
+        usage: /<command> <player>
