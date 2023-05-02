@@ -26,6 +26,7 @@ public class LifestealWithdraw implements CommandExecutor {
 				player.getInventory().addItem(LifestealHeart.heart);
 				HeartListener.modifyMaxHealth(player, -2);
 				SpigotLogger.info(player.getDisplayName() + " withdrew a heart");
+				BeaconGUI.openGUI(player);
 			}
 		}
 		

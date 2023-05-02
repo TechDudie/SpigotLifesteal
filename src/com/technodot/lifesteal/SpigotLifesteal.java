@@ -8,9 +8,9 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public class SpigotLifesteal extends JavaPlugin {
 	
-	public static boolean environmentalHeartLoss = false;
+	public static boolean environmentalHeartLoss = true;
 	public static boolean postMortalSpectation = false;
-	public static boolean debugMode = false;
+	public static boolean debugMode = true;
 	
 	private static final Listener EventListener = new HeartListener();
 	

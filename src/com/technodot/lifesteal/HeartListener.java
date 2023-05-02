@@ -27,7 +27,7 @@ public class HeartListener implements Listener {
 						SpigotLogger.info(player.getDisplayName() + " redeemed a heart");
 					} else {
 						SpigotLogger.info(player.getDisplayName() + " has hit the 20 heart cap, new heart not given!");
-						player.sendMessage("You have reached the 20 heart cap, new heart not given!");
+						player.sendMessage("§7You have reached the 20 heart cap, new heart not given!");
 					}
 					
 				}
@@ -43,31 +43,32 @@ public class HeartListener implements Listener {
 		Player player = event.getEntity();
 		Player killer = player.getKiller();
 		event.setDeathMessage(null);
-		
-		if (killer != player || killer != null) {
+		if (killer == null || player.getDisplayName() == killer.getDisplayName()) {
+			if (SpigotLifesteal.environmentalHeartLoss) {
+				modifyMaxHealth(player, -2);
+				SpigotLogger.debug("Death with killer == null (self-inflicted or mob-inflicted death) detected");
+				SpigotLogger.chat("§c" + player.getDisplayName() + "§7 died to natrual causes!");
+			}
+		} else {
 			modifyMaxHealth(player, -2);
 			modifyMaxHealth(killer, 2);
+			SpigotLogger.info("Death with killer != null (player-inflicted death) detected");
 			SpigotLogger.chat("§c" + player.getDisplayName() + "§7 was killed by §c" + killer.getDisplayName() + "§7!");
-		} else if (SpigotLifesteal.environmentalHeartLoss) {
-			modifyMaxHealth(player, -2);
-			SpigotLogger.chat("§c" + player.getDisplayName() + "§7 killed themself!");
-		}
-		if (player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue() <= 0) {
-			SpigotLogger.chat("§c" + player.getDisplayName() + "§7 has ran out of lives, §c" + player.getDisplayName() + "§7 has been banned!");
 		}
 	}
 	
 	public static boolean modifyMaxHealth(Player target, int change) {
 		double currentHealth = target.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue();
-		if (currentHealth >= 40) {
+		if (currentHealth >= 40 && change > 0) {
 			return false;
-		} else if (currentHealth - (double) change < 1) {
+		} else if (currentHealth < 3) {
 			if (SpigotLifesteal.postMortalSpectation) {
 				target.setGameMode(GameMode.SPECTATOR);
 			} else {
-				Bukkit.getBanList(Type.NAME).addBan(target.getDisplayName(), "§cYou ran out of lives! You will be unbanned when someone revives you.", null, null);
+				Bukkit.getBanList(Type.NAME).addBan(target.getDisplayName(), "\n\n§cYou ran out of lives! You will be unbanned when someone revives you.", null, null);
 			}
 			target.kickPlayer("§cYou ran out of lives! You will be unbanned when someone revives you.");
+			SpigotLogger.chat("§c" + target.getDisplayName() + "§7 has ran out of lives, §c" + target.getDisplayName() + "§7 has been banned!");
 			return false;
 		}
 		target.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(currentHealth + (double) change);
