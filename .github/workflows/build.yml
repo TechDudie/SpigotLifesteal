@@ -26,7 +26,7 @@ jobs:
           versions: 1.19.4
           generateSrc: true
 
-      - run: ls
+      - run: ls bin
 
 #      - uses: actions/upload-artifact@v3
 #        with:
