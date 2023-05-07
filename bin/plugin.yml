@@ -1,0 +1,22 @@
+name: SpigotLifesteal
+main: com.technodot.lifesteal.SpigotLifesteal
+version: 1.0
+api-version: 1.19
+author: TechnoDot
+description: Lifesteal for Spigot!
+commands:
+    withdraw:
+        description: Withdraws a heart from yourself.
+        usage: /<command>
+    revive:
+        description: Revives a player, requires revive crystal!
+        usage: /<command>
+    free:
+        description: Admin command, gives heart item to someone.
+        usage: /<command> <player>
+    sethealth:
+        description: Andmin command, sets someone's heart count.
+        usage: /command <player> <health>
+    reset:
+        description: Admin console-only command, resets someone's heart count.
+        usage: /<command> <player>
