@@ -18,17 +18,19 @@ jobs:
       - name: Set up JDK 17
         uses: actions/setup-java@v3
         with:
+          distribution: 'adopt'
           java-version: '17'
-          distribution: 'temurin'
-
-      - uses: SpraxDev/Action-SpigotMC@v4
+          
+      - name: Build With Gradle
+        run: |
+         ./gradlew jar
+          git_hash=$(git rev-parse --short "$GITHUB_SHA")
+          echo "git_hash=$git_hash" >> $GITHUB_ENV
+          echo "snapshotVersion=5.5-SNAPSHOT" >> $GITHUB_ENV
+          echo "artifactPath=$(pwd)/builds" >> $GITHUB_ENV
+      
+      - name: Upload Plugin Artifact
+        uses: actions/upload-artifact@v3
         with:
-          versions: 1.19.4
-          generateSrc: true
-
-      - run: ls bin
-
-#      - uses: actions/upload-artifact@v3
-#        with:
-#          name: SpigotBuild
-#          path: spigot-1.19.4.jar
+          name: SpigotLifesteal.jar
+          path: ${{ env.artifactPath }}/Plugin-${{ env.snapshotVersion }}.jar
